@@ -1,0 +1,17 @@
+POST http://localhost:9013/api/horus/schedule/pageQuery HTTP/1.1
+Content-Type: application/json
+
+{}
+
+
+###
+GET http://127.0.0.1:9013/api/horus/schedule/test HTTP/1.1
+
+
+###
+POST http://127.0.0.1:9013//api/horus/query/mysqlQuery HTTP/1.1
+Content-Type: application/json
+
+{
+    "querySql": "select * from horus_application_info"
+}

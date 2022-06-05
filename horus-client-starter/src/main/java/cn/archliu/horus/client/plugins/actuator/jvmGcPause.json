@@ -1,0 +1,35 @@
+{
+    "name": "jvm.gc.pause",
+    "description": "Time spent in GC pause",
+    "baseUnit": "seconds",
+    "measurements": [
+        {
+            "statistic": "COUNT",
+            "value": 5.0
+        },
+        {
+            "statistic": "TOTAL_TIME",
+            "value": 0.188
+        },
+        {
+            "statistic": "MAX",
+            "value": 0.0
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "cause",
+            "values": [
+                "Metadata GC Threshold",
+                "Allocation Failure"
+            ]
+        },
+        {
+            "tag": "action",
+            "values": [
+                "end of minor GC",
+                "end of major GC"
+            ]
+        }
+    ]
+}

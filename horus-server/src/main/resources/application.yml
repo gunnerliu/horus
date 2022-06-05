@@ -1,0 +1,94 @@
+server:
+  port: 9013
+
+spring:
+  application:
+    name: horus-server
+  profiles:
+    include:
+      - private
+  jackson:
+    time-zone: GMT+8
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 10 #初始化时建立物理连接的个数
+      min-idle: 10 #最小连接池数量
+      maxActive: 100 #最大连接池数量
+      maxWait: 20000 #获取连接时最大等待时间，单位毫秒
+      #申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      test-while-idle: true
+      time-between-eviction-runs-millis: 20000 #既作为检测的间隔时间又作为test-while-idle执行的依据
+      min-evictable-idle-time-millis: 30000 #销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接
+      #用来检测连接是否有效的sql
+      #mysql中为 select 'x'
+      #oracle中为 select 1 from dual
+      test-on-borrow: false #申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      test-on-return: false #归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      exception-sorter: true #当数据库抛出不可恢复的异常时,抛弃该连接
+      pool-prepared-statements: true #是否缓存preparedStatement,mysql5.5+建议开启
+      max-pool-prepared-statement-per-connection-size: 20 #当值大于20时poolPreparedStatements会自动修改为true
+      #通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      use-global-data-source-stat: true #合并多个DruidDataSource的监控数据
+      #filters通过别名的方式配置扩展插件，常用的插件有：
+      #监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
+      filters: stat,wall,log4j
+      #设置访问druid监控页面的拦截路径及账号和密码,默认没有
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: horus
+        login-password: admin
+  flyway:
+    # flyway自动配置 true 开启
+    enabled: true
+    #设定 SQL 脚本的目录,多个路径使用逗号分隔, 比如取值为 classpath:db/migration,filesystem:/sql-migrations
+    locations:
+      - classpath:db/migration
+    # 如果数据库不是空表，需要设置成 true，否则启动报错
+    baseline-on-migrate: true
+    # 与 baseline-on-migrate: true 搭配使用
+    baseline-version: 0
+    encoding: UTF-8
+    # 开发环境最好开启 outOfOrder, 生产环境关闭 outOfOrder .
+    out-of-order: false
+    # 禁止清理数据库表
+    clean-disabled: true
+    # 校验
+    validate-on-migrate: true
+    # 版本控制日志表，默认flyway_schema_history,不同系统建议修改改数据
+    table: flyway_schema_history
+
+mybatis-plus:
+  mapper-locations:
+    - "classpath:cn/archliu/horus/infr/domain/*/mapper/xml/*.xml"
+  #mybatis-plus配置控制台打印完整带参数SQL语句
+  # configuration:
+  #   log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+archliu:
+  common:
+    add-advice: true
+
+horus:
+  client:
+    horus-host: http://127.0.0.1:9013
+    app-name: horus-server
+    access-party: archliu-horus
+    monitor-api-log: true
+    monitor-api: true
+    monitor-logback: true
+    monitor-app: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" #暴露所有端点
+  endpoint:
+    health:
+      show-details: always

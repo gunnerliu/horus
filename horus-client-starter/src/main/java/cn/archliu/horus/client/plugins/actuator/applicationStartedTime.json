@@ -1,0 +1,19 @@
+{
+    "name": "application.started.time",
+    "description": "Time taken (ms) to start the application",
+    "baseUnit": "seconds",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 7.08
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "main-application-class",
+            "values": [
+                "cn.archliu.horuseye.server.HorusEyeServerApplication"
+            ]
+        }
+    ]
+}

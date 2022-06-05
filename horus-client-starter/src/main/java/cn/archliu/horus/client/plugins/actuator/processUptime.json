@@ -1,0 +1,12 @@
+{
+    "name": "process.uptime",
+    "description": "The uptime of the Java virtual machine",
+    "baseUnit": "seconds",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 2086.627
+        }
+    ],
+    "availableTags": []
+}

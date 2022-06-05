@@ -1,0 +1,12 @@
+{
+    "name": "process.files.open",
+    "description": "The open file descriptor count",
+    "baseUnit": "files",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 211.0
+        }
+    ],
+    "availableTags": []
+}

@@ -1,0 +1,12 @@
+{
+    "name": "process.cpu.usage",
+    "description": "The \"recent cpu usage\" for the Java Virtual Machine process",
+    "baseUnit": null,
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 0.0
+        }
+    ],
+    "availableTags": []
+}

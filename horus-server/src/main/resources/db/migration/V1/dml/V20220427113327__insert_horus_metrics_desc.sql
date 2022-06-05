@@ -1,0 +1,1 @@
+insert into horus_metrics_desc(metrics_code, metrics_name, metrics_type, taos_st_name) values('horusCounter', '计数指标', 'METRICS', 'horus_counter_st');

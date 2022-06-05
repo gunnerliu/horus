@@ -1,0 +1,24 @@
+{
+    "name": "jvm.threads.states",
+    "description": "The current number of threads having BLOCKED state",
+    "baseUnit": "threads",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 37.0
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "state",
+            "values": [
+                "timed-waiting",
+                "new",
+                "runnable",
+                "blocked",
+                "waiting",
+                "terminated"
+            ]
+        }
+    ]
+}

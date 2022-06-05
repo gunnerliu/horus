@@ -1,0 +1,33 @@
+{
+    "app.name": "",
+    "app.ip": "",
+    "app.port": "",
+    "application.ready.time": "应用准备时间",
+    "application.started.time": "应用运行时间",
+    "jvm.buffer.count": "An estimate of the number of buffers in the pool",
+    "jvm.buffer.memory.used": "An estimate of the memory that the Java virtual machine is using for this buffer pool",
+    "jvm.buffer.total.capacity": "An estimate of the total capacity of the buffers in this pool",
+    "jvm.gc.live.data.size": "Size of long-lived heap memory pool after reclamation",
+    "jvm.gc.max.data.size": "Max size of long-lived heap memory pool",
+    "jvm.gc.memory.allocated": "Incremented for an increase in the size of the (young) heap memory pool after one GC to before the next",
+    "jvm.gc.memory.promoted": "Count of positive increases in the size of the old generation memory pool before GC to after GC",
+    "jvm.gc.overhead": "An approximation of the percent of CPU time used by GC activities over the last lookback period or since monitoring began, whichever is shorter, in the range [0..1]",
+    "jvm.gc.pause": {
+        "COUNT": "",
+        "TOTAL_TIME": "",
+        "MAX": ""
+    },
+    "jvm.memory.committed": "The amount of memory in bytes that is committed for the Java virtual machine to use",
+    "jvm.memory.max": "The maximum amount of memory in bytes that can be used for memory management",
+    "jvm.memory.usage.after.gc": "The percentage of long-lived heap pool used after the last GC event, in the range [0..1]",
+    "jvm.memory.used": "The amount of used memory",
+    "jvm.threads.daemon": "The current number of live daemon threads",
+    "jvm.threads.live": "The current number of live threads including both daemon and non-daemon threads",
+    "jvm.threads.peak": "The peak live thread count since the Java virtual machine started or peak was reset",
+    "jvm.threads.states": "The current number of threads having BLOCKED state",
+    "process.cpu.usage": "The \"recent cpu usage\" for the Java Virtual Machine process",
+    "process.files.max": "The maximum file descriptor count",
+    "process.files.open": "The open file descriptor count",
+    "process.start.time": "Start time of the process since unix epoch",
+    "process.uptime": "The uptime of the Java virtual machine"
+}

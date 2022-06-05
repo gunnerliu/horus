@@ -1,0 +1,12 @@
+{
+    "name": "jvm.gc.memory.promoted",
+    "description": "Count of positive increases in the size of the old generation memory pool before GC to after GC",
+    "baseUnit": "bytes",
+    "measurements": [
+        {
+            "statistic": "COUNT",
+            "value": 2.632932E7
+        }
+    ],
+    "availableTags": []
+}

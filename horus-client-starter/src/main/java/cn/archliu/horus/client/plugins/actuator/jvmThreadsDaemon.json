@@ -1,0 +1,12 @@
+{
+    "name": "jvm.threads.daemon",
+    "description": "The current number of live daemon threads",
+    "baseUnit": "threads",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 24.0
+        }
+    ],
+    "availableTags": []
+}

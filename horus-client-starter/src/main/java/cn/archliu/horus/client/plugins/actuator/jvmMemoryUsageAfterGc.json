@@ -1,0 +1,25 @@
+{
+    "name": "jvm.memory.usage.after.gc",
+    "description": "The percentage of long-lived heap pool used after the last GC event, in the range [0..1]",
+    "baseUnit": "percent",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 0.007252550111701379
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "area",
+            "values": [
+                "heap"
+            ]
+        },
+        {
+            "tag": "pool",
+            "values": [
+                "long-lived"
+            ]
+        }
+    ]
+}

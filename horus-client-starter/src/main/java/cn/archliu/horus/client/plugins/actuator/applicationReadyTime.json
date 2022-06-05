@@ -1,0 +1,19 @@
+{
+    "name": "application.ready.time",
+    "description": "Time taken (ms) for the application to be ready to service requests",
+    "baseUnit": "seconds",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 7.227
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "main-application-class",
+            "values": [
+                "cn.archliu.horuseye.server.HorusEyeServerApplication"
+            ]
+        }
+    ]
+}

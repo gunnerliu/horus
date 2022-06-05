@@ -1,0 +1,12 @@
+{
+    "name": "jvm.gc.overhead",
+    "description": "An approximation of the percent of CPU time used by GC activities over the last lookback period or since monitoring began, whichever is shorter, in the range [0..1]",
+    "baseUnit": "percent",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 0.0
+        }
+    ],
+    "availableTags": []
+}

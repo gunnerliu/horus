@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.archliu.horus.infr.domain.reach.mapper.HorusReachReceiverMapper">
+
+    <select id="loadByChannel" resultType="cn.archliu.horus.infr.domain.reach.entity.HorusReachReceiver">
+        select rec.* from horus_channel_receiver cr left join horus_reach_receiver rec on cr.channel_id = #{channelId} and cr.receiver_id = rec.id
+    </select>
+
+
+</mapper>

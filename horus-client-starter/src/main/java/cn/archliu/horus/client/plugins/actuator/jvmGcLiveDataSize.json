@@ -1,0 +1,12 @@
+{
+    "name": "jvm.gc.live.data.size",
+    "description": "Size of long-lived heap memory pool after reclamation",
+    "baseUnit": "bytes",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 2.969772E7
+        }
+    ],
+    "availableTags": []
+}

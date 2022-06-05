@@ -1,0 +1,12 @@
+{
+    "name": "process.files.max",
+    "description": "The maximum file descriptor count",
+    "baseUnit": "files",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 524288.0
+        }
+    ],
+    "availableTags": []
+}

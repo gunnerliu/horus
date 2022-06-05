@@ -1,0 +1,1 @@
+insert into horus_schedule_job(job_code, job_name, corn_str, job_type, job_execute_id) VALUES('checkAppAlive', '服务检活', '*/30 * * * * ?', 'SCRIPT', 'AppAliveCheck');

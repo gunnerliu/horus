@@ -1,0 +1,31 @@
+{
+    "name": "jvm.memory.used",
+    "description": "The amount of used memory",
+    "baseUnit": "bytes",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 2.57547144E8
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "area",
+            "values": [
+                "heap",
+                "nonheap"
+            ]
+        },
+        {
+            "tag": "id",
+            "values": [
+                "Compressed Class Space",
+                "PS Survivor Space",
+                "PS Old Gen",
+                "Metaspace",
+                "PS Eden Space",
+                "Code Cache"
+            ]
+        }
+    ]
+}

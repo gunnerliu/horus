@@ -1,0 +1,12 @@
+{
+    "name": "jvm.gc.max.data.size",
+    "description": "Max size of long-lived heap memory pool",
+    "baseUnit": "bytes",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 5.588385792E9
+        }
+    ],
+    "availableTags": []
+}

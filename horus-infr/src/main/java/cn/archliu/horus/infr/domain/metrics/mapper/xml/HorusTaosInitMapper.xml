@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.archliu.horus.infr.domain.metrics.mapper.HorusTaosInitMapper">
+
+    <resultMap id="stbales" type="cn.archliu.horus.infr.domain.metrics.entity.ShowSTableEntity">
+        <result property="name" column="name" />
+        <result property="createdTime" column="created_time" />
+        <result property="columns" column="columns" />
+        <result property="tags" column="tags" />
+        <result property="tables" column="tables" />
+    </resultMap>
+
+    <update id="initCounterST">
+        create stable if not exists metrics.horus_counter_st(
+            ts  timestamp,
+            marking_time    timestamp,
+            counter_code NCHAR(64),
+            trace_id NCHAR(64),
+            span_id NCHAR(64),
+            label NCHAR(64)
+        ) tags (split_tag NCHAR(64), app_name NCHAR(64), access_party NCHAR(64));
+    </update>
+
+    <update id="createTDSTable" parameterType="cn.archliu.horus.infr.domain.metrics.entity.AddColumnEntity">
+        create stable if not exists metrics.#{taosStName}(
+            ts  timestamp,
+            marking_time    timestamp,
+            trace_id NCHAR(64),
+            span_id NCHAR(64)
+        <if test="columns != null and columns.size() > 0">
+            <foreach collection="columns" item="columnItem">
+                ,#{columnItem.columnCode}    #{columnItem.columnType}
+            </foreach>
+        </if>
+        ) tags (split_tag NCHAR(64), app_name NCHAR(64), access_party NCHAR(64));
+    </update>
+
+    <update id="addColumn" parameterType="cn.archliu.horus.infr.domain.metrics.entity.AddColumnEntity">
+        alter table metrics.#{addColumnEntity.taosStName} add column #{addColumnEntity.columnCode} #{addColumnEntity.columnType}
+    </update>
+
+    <select id="showSTables" resultMap="stbales">
+        show metrics.stables
+    </select>
+
+</mapper>

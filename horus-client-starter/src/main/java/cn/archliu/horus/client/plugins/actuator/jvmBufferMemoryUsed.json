@@ -1,0 +1,20 @@
+{
+    "name": "jvm.buffer.memory.used",
+    "description": "An estimate of the memory that the Java virtual machine is using for this buffer pool",
+    "baseUnit": "bytes",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 81767.0
+        }
+    ],
+    "availableTags": [
+        {
+            "tag": "id",
+            "values": [
+                "direct",
+                "mapped"
+            ]
+        }
+    ]
+}

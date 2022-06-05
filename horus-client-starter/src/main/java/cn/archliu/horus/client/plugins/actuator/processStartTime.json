@@ -1,0 +1,12 @@
+{
+    "name": "process.start.time",
+    "description": "Start time of the process since unix epoch.",
+    "baseUnit": "seconds",
+    "measurements": [
+        {
+            "statistic": "VALUE",
+            "value": 1.652705638359E9
+        }
+    ],
+    "availableTags": []
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.archliu.horus.infr.domain.collection.mapper.HorusMetricsMapper">
+
+    <insert id="counterCol" parameterType="cn.archliu.horus.infr.domain.collection.entity.HorusCounter">
+        insert into metrics.#{childTableName}(ts, marking_time, counter_code, trace_id, span_id, label) 
+        using metrics.horus_counter_st TAGS(#{splitTag}, #{appName}, #{accessParty}) values
+        <foreach collection="counters" item="counter" separator="," index="timeIndex">
+            (now + #{timeIndex}a, #{counter.markingTime}, #{counter.counterCode}, #{counter.traceId}, #{counter.spanId}, #{counter.label})
+        </foreach>
+    </insert>
+
+    <insert id="metricsCol" parameterType="cn.archliu.horus.infr.domain.collection.entity.MetricsCol">
+        insert into metrics.#{metric.childTableName}(ts,
+        <foreach collection="metric.metricsColumns" separator="," item="metricsColumn">
+            `${metricsColumn}`
+        </foreach>
+        ) using metrics.#{metric.taosStName} TAGS(#{metric.splitTag}, #{appName}, #{accessParty}) values
+        <foreach collection="metric.metricsColumnsValue" separator="," item="columnValues" index="timeIndex">
+            (now + #{timeIndex}a,
+            <foreach collection="columnValues" item="columnValue" separator=",">
+                #{columnValue}
+            </foreach>
+            )
+        </foreach>
+    </insert>
+
+</mapper>
