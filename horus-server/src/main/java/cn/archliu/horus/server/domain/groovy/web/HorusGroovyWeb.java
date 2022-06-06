@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +36,7 @@ public class HorusGroovyWeb {
     private HorusGroovyService groovyService;
 
     @ApiOperation("新增 groovy 脚本")
-    @PostMapping("/addGroovy")
+    @PutMapping("/addGroovy")
     public ComRes<ResData<Void>> addGroovy(@RequestBody AddGroovyDTO addGroovyDTO) {
         HorusGroovyInfo groovyInfo = GroovyConvert.INSTANCE.trans(addGroovyDTO)
                 .setLastModTime(System.currentTimeMillis()).setFilePath("DB");

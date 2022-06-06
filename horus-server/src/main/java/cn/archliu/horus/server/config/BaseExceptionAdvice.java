@@ -97,12 +97,4 @@ public class BaseExceptionAdvice {
         return ComRes.failed("unhandle base exception !");
     }
 
-    @Order(value = Ordered.LOWEST_PRECEDENCE)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Throwable.class)
-    public ComRes<ResData<Void>> catchException(Throwable exception) {
-        log.error("catch unknown exception!", exception);
-        return ComRes.failed("unknown exception !");
-    }
-
 }

@@ -14,13 +14,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AddGroovyDTO {
 
-    @ApiModelProperty("指标 code")
-    @NotBlank(message = "指标 code 不允许为空")
+    @ApiModelProperty("脚本 code")
+    @NotBlank(message = "脚本 code 不允许为空")
     private String groovyCode;
-
-    @ApiModelProperty("文件名")
-    @NotBlank(message = "文件名不允许为空")
-    private String groovyFileName;
 
     @ApiModelProperty("执行类型,SCRIPT->使用GroovyScript执行,CLASS_LOAD->使用 GroovyClassLoader 加载")
     @NotNull(message = "执行类型不允许为空")

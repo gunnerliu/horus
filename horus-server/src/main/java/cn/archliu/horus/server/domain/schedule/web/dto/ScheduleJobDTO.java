@@ -3,6 +3,7 @@ package cn.archliu.horus.server.domain.schedule.web.dto;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import cn.archliu.horus.common.enums.ComState;
 import cn.archliu.horus.server.domain.schedule.enums.ScheduleJobType;
@@ -29,7 +30,7 @@ public class ScheduleJobDTO {
     private String cornStr;
 
     @ApiModelProperty("定时任务类型,BEAN->执行job bean,SCRIPT->执行脚本")
-    @NotBlank(message = "定时任务类型不允许为空")
+    @NotNull(message = "定时任务类型不允许为空")
     private ScheduleJobType jobType;
 
     @ApiModelProperty("BEAN->执行 bean,SCRIPT->执行脚本")
