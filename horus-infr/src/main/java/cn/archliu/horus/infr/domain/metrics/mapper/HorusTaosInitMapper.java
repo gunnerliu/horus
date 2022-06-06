@@ -26,18 +26,6 @@ public interface HorusTaosInitMapper {
     void initCounterST();
 
     /**
-     * 创建计数指标的子表
-     * 
-     * @param tableName
-     *                  子表名称
-     * @param splitTag
-     *                  分隔标签
-     */
-    @Update("create table if not exists metrics.${tableName} using metrics.horus_counter_st(split_tag, app_name, access_party) tags(#{splitTag}, #{appName}, #{accessParty})")
-    void createCounterChild(@Param("tableName") String tableName, @Param("splitTag") String splitTag,
-            @Param("appName") String appName, @Param("accessParty") String accessParty);
-
-    /**
      * 创建 TDEngine 超级表
      * 
      * @param taosStName

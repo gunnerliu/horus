@@ -1,1 +1,1 @@
-insert into horus_groovy_info(groovy_code, groovy_file_name, file_path, execute_type) VALUES('AppAliveCheck', 'AppAliveCheck.groovy', 'classpath:groovy/AppAliveCheck.groovy', 'SCRIPT');
+insert into horus_groovy_info(groovy_code, file_path, execute_type) VALUES('AppAliveCheck', 'classpath:groovy/AppAliveCheck.groovy', 'SCRIPT');

@@ -216,7 +216,8 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
         for (HorusGroovyInfo groovyInfo : scriptCollect) {
             // 在进行 groovy 脚本更新的时候需要将 groovyClassLoader 进行 close
             GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
-            long lastModified = groovyInfo.getLastModTime();
+            long lastModified = groovyInfo.getLastModTime() == null ? System.currentTimeMillis()
+                    : groovyInfo.getLastModTime();
             // 参数赋值
             Binding binding = new Binding();
             // 塞入数据源
@@ -233,7 +234,9 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
                 File file = new File(ResourceUtils.getFile(groovyInfo.getFilePath()).getPath());
                 lastModified = file.lastModified();
                 GroovyScriptEngine groovyScriptEngine = new GroovyScriptEngine(file.getPath(), groovyClassLoader);
-                groovyScript = groovyScriptEngine.createScript(groovyInfo.getGroovyCode(), binding);
+                // 获取文件名
+                String[] split = file.getPath().split("/");
+                groovyScript = groovyScriptEngine.createScript(split[split.length - 1], binding);
             }
             groovyScriptCache.put(groovyInfo.getGroovyCode(),
                     new GroovyScriptEngineCache().setGroovyCode(groovyInfo.getGroovyCode())

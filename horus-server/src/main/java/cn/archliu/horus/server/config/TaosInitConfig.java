@@ -51,9 +51,7 @@ public class TaosInitConfig implements CommandLineRunner {
         taosInitMapper.initMetricsDB();
         // 2、创建计数指标超级表
         taosInitMapper.initCounterST();
-        // 3、创建一个计数指标的基础子表
-        taosInitMapper.createCounterChild("basic_counter", "basic", "basic", "basic");
-        // 4、捞出没有在 TDEngine 中建表的 metricsCode 进行建表
+        // 3、捞出没有在 TDEngine 中建表的 metricsCode 进行建表
         metricsDescService.createTaosSTables();
     }
 

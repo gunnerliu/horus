@@ -82,8 +82,7 @@ public class ScheduledTaskRunnable implements Runnable {
      * 执行脚本
      */
     private void executeScript(HorusScheduleJob job) {
-
-        Map<Object, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         // 定时任务参数
         if (StrUtil.isNotBlank(job.getParamStr())) {
             params.put(ScriptParamName.HORUS_SCHEDULE_PARAM, JSONUtil.parseArray(job.getParamStr()));
