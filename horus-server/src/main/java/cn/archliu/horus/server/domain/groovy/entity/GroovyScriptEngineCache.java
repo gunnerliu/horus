@@ -1,7 +1,7 @@
 package cn.archliu.horus.server.domain.groovy.entity;
 
 import groovy.lang.GroovyClassLoader;
-import groovy.util.GroovyScriptEngine;
+import groovy.lang.Script;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,11 +14,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class GroovyScriptEngineCache {
 
-    /** 脚本名 */
-    private String scriptName;
+    /** 脚本code */
+    private String groovyCode;
 
     /** groovy 脚本执行引擎 */
-    private GroovyScriptEngine groovyScriptEngine;
+    private Script groovyScript;
 
     /** GroovyObject 的加载器 */
     private GroovyClassLoader groovyClassLoader;

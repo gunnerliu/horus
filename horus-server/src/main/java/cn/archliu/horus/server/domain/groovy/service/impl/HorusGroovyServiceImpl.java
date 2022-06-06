@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -26,6 +28,7 @@ import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapp
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -49,17 +52,16 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
+import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
-import groovy.util.ResourceException;
-import groovy.util.ScriptException;
 import lombok.extern.slf4j.Slf4j;
 
 @DependsOn("flywayInitializer")
@@ -144,9 +146,9 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
                         .filter(item -> !existedFile.contains(GROOVY_PATH + item.getName()))
                         .collect(Collectors.toList());
                 for (File f : newFile) {
-                    HorusGroovyInfo newInfo = new HorusGroovyInfo().setGroovyFileName(f.getName())
-                            .setLastModTime(file.lastModified()).setGroovyCode(IdUtil.simpleUUID())
-                            .setFilePath(GROOVY_PATH + f.getName()).setExecuteType(ExecuteType.SCRIPT.name());
+                    HorusGroovyInfo newInfo = new HorusGroovyInfo().setLastModTime(file.lastModified())
+                            .setGroovyCode(IdUtil.simpleUUID()).setFilePath(GROOVY_PATH + f.getName())
+                            .setExecuteType(ExecuteType.SCRIPT.name());
                     try {
                         BufferedReader reader = FileUtil.getReader(f, StandardCharsets.UTF_8);
                         String firstLine = reader.readLine();
@@ -157,30 +159,6 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
                     } catch (Exception e) {
                         log.error("读取 groovy 脚本首行异常！", e);
                     }
-                    groovyInfoMapper.insert(newInfo);
-                }
-            }
-        }
-        // 同步指定外部目录下的脚本信息
-        if (StrUtil.isNotBlank(horusServerProperties.getGroovyPath())
-                && BooleanUtil.isTrue(horusServerProperties.getSyncGroovyPath())) {
-            File file = new File(ResourceUtils.getFile(horusServerProperties.getGroovyPath()).getPath());
-            File[] listFiles = file.listFiles();
-            if (ArrayUtil.isNotEmpty(listFiles)) {
-                List<String> collect = ListUtil.toList(listFiles).stream().map(File::getPath)
-                        .collect(Collectors.toList());
-                // 筛选出未同步的文件信息
-                List<HorusGroovyInfo> existed = new LambdaQueryChainWrapper<>(groovyInfoMapper)
-                        .in(HorusGroovyInfo::getFilePath, collect).list();
-                List<String> existedFile = existed.stream().map(HorusGroovyInfo::getFilePath)
-                        .collect(Collectors.toList());
-                List<File> newFile = ListUtil.toList(listFiles).stream()
-                        .filter(item -> !existedFile.contains(item.getPath()))
-                        .collect(Collectors.toList());
-                for (File f : newFile) {
-                    HorusGroovyInfo newInfo = new HorusGroovyInfo().setGroovyFileName(f.getName())
-                            .setLastModTime(file.lastModified()).setGroovyCode(IdUtil.simpleUUID())
-                            .setFilePath(f.getAbsolutePath()).setExecuteType(ExecuteType.SCRIPT.name());
                     groovyInfoMapper.insert(newInfo);
                 }
             }
@@ -200,19 +178,27 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
         for (HorusGroovyInfo groovyInfo : classCollect) {
             // 在进行 groovy 脚本更新的时候需要将 groovyClassLoader 进行 close
             GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
-            File file = new File(ResourceUtils.getURL(groovyInfo.getFilePath()).getPath());
-            Class<?> parseClass = groovyClassLoader.parseClass(file);
+            // 这边分为两种，一种是resources目录下的，另一种是存放在数据库中的
+            Class<?> parseClass = null;
+            long lastModified = groovyInfo.getLastModTime();
+            if ("DB".equals(groovyInfo.getFilePath())) {
+                parseClass = groovyClassLoader.parseClass(groovyInfo.getScriptContent());
+            } else {
+                File file = new File(ResourceUtils.getURL(groovyInfo.getFilePath()).getPath());
+                parseClass = groovyClassLoader.parseClass(file);
+                lastModified = file.lastModified();
+            }
             GroovyObject groovyObject = (GroovyObject) parseClass.newInstance();
             // 塞入数据源
             groovyObject.setProperty(TD, dataSource.getDataSource("td"));
             groovyObject.setProperty(MASTER, dataSource.getDataSource("master"));
-            groovyObject.setProperty(LOG, LoggerFactory.getLogger(groovyInfo.getGroovyFileName()));
+            groovyObject.setProperty(LOG, LoggerFactory.getLogger(groovyInfo.getGroovyCode()));
             groovyObject.setProperty(MESSAGE_REACH, messageReach);
             groovyClassCache.put(groovyInfo.getGroovyCode(),
                     new GroovyObjectCache().setGroovyClassLoader(groovyClassLoader).setGroovyObject(groovyObject)
                             .setLastModTime(groovyInfo.getLastModTime()));
             // 更新表中的 lastModTime
-            new LambdaUpdateChainWrapper<>(groovyInfoMapper).set(HorusGroovyInfo::getLastModTime, file.lastModified())
+            new LambdaUpdateChainWrapper<>(groovyInfoMapper).set(HorusGroovyInfo::getLastModTime, lastModified)
                     .eq(HorusGroovyInfo::getGroovyCode, groovyInfo.getGroovyCode()).update();
         }
     }
@@ -230,21 +216,37 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
         for (HorusGroovyInfo groovyInfo : scriptCollect) {
             // 在进行 groovy 脚本更新的时候需要将 groovyClassLoader 进行 close
             GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
-            File file = new File(ResourceUtils.getFile(groovyInfo.getFilePath()).getPath());
-            GroovyScriptEngine groovyScriptEngine = new GroovyScriptEngine(file.getPath(), groovyClassLoader);
-            groovyScriptEngine.createScript(groovyInfo.getGroovyFileName(), null);
+            long lastModified = groovyInfo.getLastModTime();
+            // 参数赋值
+            Binding binding = new Binding();
+            // 塞入数据源
+            binding.setProperty(TD, dataSource.getDataSource("td"));
+            binding.setProperty(MASTER, dataSource.getDataSource("master"));
+            binding.setProperty(LOG, LoggerFactory.getLogger(groovyInfo.getGroovyCode()));
+            binding.setProperty(MESSAGE_REACH, messageReach);
+            Script groovyScript = null;
+            if ("DB".equals(groovyInfo.getFilePath())) {
+                Class<?> parseClass = groovyClassLoader.parseClass(groovyInfo.getScriptContent(),
+                        groovyInfo.getGroovyCode());
+                groovyScript = InvokerHelper.createScript(parseClass, binding);
+            } else {
+                File file = new File(ResourceUtils.getFile(groovyInfo.getFilePath()).getPath());
+                lastModified = file.lastModified();
+                GroovyScriptEngine groovyScriptEngine = new GroovyScriptEngine(file.getPath(), groovyClassLoader);
+                groovyScript = groovyScriptEngine.createScript(groovyInfo.getGroovyCode(), binding);
+            }
             groovyScriptCache.put(groovyInfo.getGroovyCode(),
-                    new GroovyScriptEngineCache().setScriptName(groovyInfo.getGroovyFileName())
-                            .setGroovyClassLoader(groovyClassLoader).setGroovyScriptEngine(groovyScriptEngine)
+                    new GroovyScriptEngineCache().setGroovyCode(groovyInfo.getGroovyCode())
+                            .setGroovyClassLoader(groovyClassLoader).setGroovyScript(groovyScript)
                             .setLastModTime(groovyInfo.getLastModTime()));
             // 更新表中的 lastModTime
-            new LambdaUpdateChainWrapper<>(groovyInfoMapper).set(HorusGroovyInfo::getLastModTime, file.lastModified())
+            new LambdaUpdateChainWrapper<>(groovyInfoMapper).set(HorusGroovyInfo::getLastModTime, lastModified)
                     .eq(HorusGroovyInfo::getGroovyCode, groovyInfo.getGroovyCode()).update();
         }
     }
 
     @Override
-    public Object executeGroovy(String groovyCode, Map<Object, Object> args) {
+    public Object executeGroovy(String groovyCode, Map<String, Object> args) {
         if (StrUtil.isBlank(groovyCode)) {
             throw ParamErrorException.throwE("groovyCode 为空！");
         }
@@ -305,7 +307,7 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
      * @param args
      * @return
      */
-    private Object processGroovy(String groovyCode, Map<Object, Object> args) {
+    private Object processGroovy(String groovyCode, Map<String, Object> args) {
         // 获取 groovyCode 的读写锁
         ReentrantReadWriteLock lock = getLock(groovyCode);
         // 加读锁
@@ -319,17 +321,17 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
             GroovyScriptEngineCache groovyScriptEngineCache = groovyScriptCache.get(groovyCode);
             if (groovyScriptEngineCache != null) {
                 try {
-                    // 参数赋值
-                    Binding binding = new Binding(args);
-                    // 塞入数据源
-                    binding.setProperty(TD, dataSource.getDataSource("td"));
-                    binding.setProperty(MASTER, dataSource.getDataSource("master"));
-                    binding.setProperty(LOG, LoggerFactory.getLogger(groovyScriptEngineCache.getScriptName()));
-                    binding.setProperty(MESSAGE_REACH, messageReach);
+                    if (MapUtil.isNotEmpty(args)) {
+                        Iterator<Entry<String, Object>> iterator = args.entrySet().iterator();
+                        Binding binding = groovyScriptEngineCache.getGroovyScript().getBinding();
+                        while (iterator.hasNext()) {
+                            Entry<String, Object> next = iterator.next();
+                            binding.setProperty(next.getKey(), next.getValue());
+                        }
+                    }
                     // 执行脚本
-                    return groovyScriptEngineCache.getGroovyScriptEngine().run(groovyScriptEngineCache.getScriptName(),
-                            binding);
-                } catch (ResourceException | ScriptException e) {
+                    return groovyScriptEngineCache.getGroovyScript().run();
+                } catch (Exception e) {
                     log.error("groovyCode: {} groovy execute error!", groovyCode, e);
                     throw GroovyExecuteException.throwE();
                 }
@@ -355,17 +357,8 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
 
         if (groovyClassCache.get(horusGroovyInfo.getGroovyCode()).getLastModTime()
                 .equals(horusGroovyInfo.getLastModTime())) {
-            if (BooleanUtil.isTrue(horusServerProperties.getCheckGroovyFileChange())) {
-                // 查看文件实际的修改时间
-                File file = new File(ResourceUtils.getFile(horusGroovyInfo.getFilePath()).getPath());
-                if (NumberUtil.equals(groovyClassCache.get(horusGroovyInfo.getGroovyCode()).getLastModTime(),
-                        file.lastModified())) {
-                    return;
-                }
-            } else {
-                // 文件未修改，无需刷新
-                return;
-            }
+            // 文件未修改，无需刷新
+            return;
         }
         try {
             // 清除缓存
@@ -395,17 +388,8 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
         // 尽量避免直接在服务器文件上修改，通过前端上传，如果需要实时检测服务器上文件是否修改需要打开 CheckGroovyFileChange 开关
         if (groovyScriptCache.get(horusGroovyInfo.getGroovyCode()).getLastModTime()
                 .equals(horusGroovyInfo.getLastModTime())) {
-            if (BooleanUtil.isTrue(horusServerProperties.getCheckGroovyFileChange())) {
-                // 查看文件实际的修改时间
-                File file = new File(ResourceUtils.getFile(horusGroovyInfo.getFilePath()).getPath());
-                if (NumberUtil.equals(groovyScriptCache.get(horusGroovyInfo.getGroovyCode()).getLastModTime(),
-                        file.lastModified())) {
-                    return;
-                }
-            } else {
-                // 文件未修改，无需刷新
-                return;
-            }
+            // 文件未修改，无需刷新
+            return;
         }
         try {
             // 清除缓存
@@ -431,14 +415,14 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
     }
 
     @Override
-    public void installNewGroovy(HorusGroovyInfo groovyInfo) {
+    public void addGroovy(HorusGroovyInfo groovyInfo) {
         boolean exists = new LambdaQueryChainWrapper<>(groovyInfoMapper)
                 .eq(HorusGroovyInfo::getGroovyCode, groovyInfo.getGroovyCode()).exists();
         if (exists) {
             // 更新
             new LambdaUpdateChainWrapper<>(groovyInfoMapper).set(HorusGroovyInfo::getFilePath, groovyInfo.getFilePath())
-                    .set(HorusGroovyInfo::getGroovyFileName, groovyInfo.getGroovyFileName())
                     .set(HorusGroovyInfo::getExecuteType, groovyInfo.getExecuteType())
+                    .set(HorusGroovyInfo::getScriptContent, groovyInfo.getScriptContent())
                     .set(HorusGroovyInfo::getLastModTime, groovyInfo.getLastModTime()).update();
         } else {
             // 新增
@@ -523,18 +507,23 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
         if (groovyInfo == null) {
             throw ParamErrorException.throwE("该脚本不存在！");
         }
-        try {
-            File file = new File(ResourceUtils.getFile(groovyInfo.getFilePath()).getPath());
-            FileReader filerReader = FileReader.create(file);
-            List<String> readLines = filerReader.readLines();
-            StringBuilder sBuilder = new StringBuilder();
-            for (String line : readLines) {
-                sBuilder.append(line).append("\n");
+        if ("DB".equals(groovyInfo.getFilePath())) {
+            return groovyInfo.getScriptContent();
+        } else {
+            try {
+                File file = new File(ResourceUtils.getFile(groovyInfo.getFilePath()).getPath());
+                FileReader filerReader = FileReader.create(file);
+                List<String> readLines = filerReader.readLines();
+                StringBuilder sBuilder = new StringBuilder();
+                for (String line : readLines) {
+                    sBuilder.append(line).append("\n");
+                }
+                return sBuilder.toString();
+            } catch (FileNotFoundException e) {
+                log.warn("groovy 脚本未查询到： {}", groovyCode, e);
+                throw ParamErrorException.throwE("该脚本不存在！");
             }
-            return sBuilder.toString();
-        } catch (FileNotFoundException e) {
-            log.warn("groovy 脚本未查询到： {}", groovyCode, e);
-            throw ParamErrorException.throwE("该脚本不存在！");
         }
+
     }
 }

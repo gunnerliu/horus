@@ -34,14 +34,9 @@ public class HorusGroovyInfo implements Serializable {
     private Long id;
 
     /**
-     * 指标 code
+     * 脚本 code
      */
     private String groovyCode;
-
-    /**
-     * 文件名
-     */
-    private String groovyFileName;
 
     /**
      * 脚本路径,放在项目resource路径下的脚本需要加前缀 classpath:
@@ -52,6 +47,11 @@ public class HorusGroovyInfo implements Serializable {
      * 执行类型,SCRIPT->使用GroovyScript执行,CLASS_LOAD->使用 GroovyClassLoader 加载
      */
     private String executeType;
+
+    /**
+     * groovy脚本代码
+     */
+    private String scriptContent;
 
     /**
      * groovy 脚本编译时文件最后修改时间,会跟文件实际的最后修改时间比较进行缓存更新

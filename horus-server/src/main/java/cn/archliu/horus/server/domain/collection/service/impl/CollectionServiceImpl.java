@@ -137,7 +137,7 @@ public class CollectionServiceImpl implements CollectionService, ApplicationRunn
         if (CollUtil.isNotEmpty(groovyCodes)) {
             for (String groovyCode : groovyCodes) {
                 try {
-                    Map<Object, Object> param = new HashMap<>();
+                    Map<String, Object> param = new HashMap<>();
                     param.put(METRICS, metric);
                     param.put(APP_NAME, appName);
                     param.put(ACCESS_PARTY, accessParty);

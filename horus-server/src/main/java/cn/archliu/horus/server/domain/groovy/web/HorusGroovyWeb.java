@@ -14,16 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import cn.archliu.common.response.ComRes;
 import cn.archliu.common.response.sub.CRUDData;
 import cn.archliu.common.response.sub.ResData;
 import cn.archliu.horus.infr.domain.groovy.entity.HorusGroovyInfo;
-import cn.archliu.horus.server.domain.groovy.entity.UploadGroovyInfo;
-import cn.archliu.horus.server.domain.groovy.manager.HorusGroovyFileManager;
 import cn.archliu.horus.server.domain.groovy.service.HorusGroovyService;
-import cn.archliu.horus.server.domain.groovy.web.dto.UploadGroovyDTO;
+import cn.archliu.horus.server.domain.groovy.web.convert.GroovyConvert;
+import cn.archliu.horus.server.domain.groovy.web.dto.AddGroovyDTO;
 import cn.archliu.horus.server.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,31 +33,28 @@ import io.swagger.annotations.ApiOperation;
 public class HorusGroovyWeb {
 
     @Autowired
-    private HorusGroovyFileManager horusGroovyFileManager;
-
-    @Autowired
     private HorusGroovyService groovyService;
 
-    @ApiOperation("上传 groovy 脚本")
-    @PostMapping("/uploadGroovy")
-    public ComRes<ResData<Void>> uploadGroovy(@RequestParam("UploadGroovy") MultipartFile multipartFile,
-            @RequestBody UploadGroovyDTO uploadGroovyDTO) {
-        horusGroovyFileManager.uploadGroovy(multipartFile, new UploadGroovyInfo()
-                .setGroovyCode(uploadGroovyDTO.getGroovyCode()).setExecuteType(uploadGroovyDTO.getExecuteType()));
+    @ApiOperation("新增 groovy 脚本")
+    @PostMapping("/addGroovy")
+    public ComRes<ResData<Void>> addGroovy(@RequestBody AddGroovyDTO addGroovyDTO) {
+        HorusGroovyInfo groovyInfo = GroovyConvert.INSTANCE.trans(addGroovyDTO)
+                .setLastModTime(System.currentTimeMillis()).setFilePath("DB");
+        groovyService.addGroovy(groovyInfo);
         return ComRes.success();
     }
 
     @ApiOperation("卸载 groovy 脚本缓存")
     @DeleteMapping("/unInstallGroovy")
     public ComRes<ResData<Void>> unInstallGroovy(@RequestParam("groovyCode") String groovyCode) {
-        horusGroovyFileManager.unInstallGroovy(groovyCode);
+        groovyService.unInstallGroovy(groovyCode);
         return ComRes.success();
     }
 
     @ApiOperation("删除 groovy 脚本：删除文件、删除信息、卸载缓存")
     @DeleteMapping("/delGroovy")
     public ComRes<ResData<Void>> delGroovy(@RequestParam("groovyCode") String groovyCode) {
-        horusGroovyFileManager.delGroovy(groovyCode);
+        groovyService.delGroovy(groovyCode);
         return ComRes.success();
     }
 

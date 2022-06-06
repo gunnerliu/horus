@@ -23,14 +23,14 @@ public interface HorusGroovyService {
      * @param args
      * @return
      */
-    Object executeGroovy(String groovyCode, Map<Object, Object> args);
+    Object executeGroovy(String groovyCode, Map<String, Object> args);
 
     /**
      * 新增 groovy 脚本
      * 
      * @param groovyInfo
      */
-    void installNewGroovy(HorusGroovyInfo groovyInfo);
+    void addGroovy(HorusGroovyInfo groovyInfo);
 
     /**
      * 卸载 groovy 脚本
