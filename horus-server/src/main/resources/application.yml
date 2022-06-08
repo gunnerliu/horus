@@ -64,6 +64,8 @@ spring:
     table: flyway_schema_history
 
 mybatis-plus:
+  global-config:
+    banner: false
   mapper-locations:
     - "classpath:cn/archliu/horus/infr/domain/*/mapper/xml/*.xml"
   #mybatis-plus配置控制台打印完整带参数SQL语句
