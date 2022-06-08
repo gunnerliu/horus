@@ -119,8 +119,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         return historyMapper.selectPage(page, new QueryWrapper<HorusScheduleHistory>().eq("job_code", jobCode));
     }
 
+    // TODO 后续可以改造使用 redis 锁进行并发控制，当前先用 synchronized
     @Override
-    public void editScheduleState(EditScheduleStateDTO editScheduleState) {
+    public synchronized void editScheduleState(EditScheduleStateDTO editScheduleState) {
         HorusScheduleJob one = new LambdaQueryChainWrapper<>(jobMapper)
                 .eq(HorusScheduleJob::getJobCode, editScheduleState.getJobCode()).one();
         if (one == null) {
