@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.archliu.common.response.ComRes;
 import cn.archliu.common.response.sub.CRUDData;
 import cn.archliu.common.response.sub.ResData;
+import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleHistory;
 import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleJob;
 import cn.archliu.horus.server.domain.schedule.service.ScheduleService;
 import cn.archliu.horus.server.domain.schedule.web.convert.ScheduleConvert;
+import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleStateDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 import cn.archliu.horus.server.util.PageUtil;
 import io.swagger.annotations.Api;
@@ -57,6 +60,13 @@ public class ScheduleWeb {
         return ComRes.success();
     }
 
+    @ApiOperation("修改定时任务状态")
+    @PostMapping("/editScheduleState")
+    public ComRes<ResData<Void>> editScheduleState(@RequestBody EditScheduleStateDTO editScheduleState) {
+        scheduleService.editScheduleState(editScheduleState);
+        return ComRes.success();
+    }
+
     @ApiOperation("删除定时任务")
     @DeleteMapping("/deleteCronTask")
     public ComRes<ResData<Void>> deleteCronTask(
@@ -70,6 +80,16 @@ public class ScheduleWeb {
     public ComRes<ResData<Void>> editCronTask() {
         // TODO 修改定时任务
         return ComRes.success();
+    }
+
+    @ApiOperation("分页查询执行历史")
+    @GetMapping("/pageHistory")
+    public ComRes<CRUDData<HorusScheduleHistory>> pageHistory(
+            @NotBlank(message = "任务 code 不允许为空") @RequestParam("jobCode") String jobCode,
+            @RequestParam("pageIndex") Integer pageIndex, @RequestParam("pageSize") Integer pageSize) {
+        Page<HorusScheduleHistory> page = PageUtil.build(pageIndex, pageSize);
+        IPage<HorusScheduleHistory> pageHistory = scheduleService.pageHistory(jobCode, page);
+        return ComRes.success(PageUtil.build(pageHistory));
     }
 
 }

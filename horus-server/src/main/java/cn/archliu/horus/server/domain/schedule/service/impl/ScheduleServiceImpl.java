@@ -5,20 +5,25 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.archliu.horus.common.enums.ComState;
 import cn.archliu.horus.common.exception.sub.ParamErrorException;
 import cn.archliu.horus.infr.domain.groovy.entity.HorusGroovyInfo;
 import cn.archliu.horus.infr.domain.groovy.mapper.HorusGroovyInfoMapper;
+import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleHistory;
 import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleJob;
+import cn.archliu.horus.infr.domain.schedule.mapper.HorusScheduleHistoryMapper;
 import cn.archliu.horus.infr.domain.schedule.mapper.HorusScheduleJobMapper;
 import cn.archliu.horus.server.domain.schedule.service.ScheduleService;
 import cn.archliu.horus.server.domain.schedule.task.CronTaskRegister;
 import cn.archliu.horus.server.domain.schedule.task.HorusScheduleTask;
 import cn.archliu.horus.server.domain.schedule.web.convert.ScheduleConvert;
+import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleStateDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 import cn.hutool.core.map.MapUtil;
 
@@ -36,6 +41,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired(required = false)
     private Map<String, HorusScheduleTask<?>> horusScheduleTasks;
+
+    @Autowired
+    private HorusScheduleHistoryMapper historyMapper;
 
     @Override
     public void addCronTask(ScheduleJobDTO scheduleJobDTO) {
@@ -104,6 +112,35 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public IPage<HorusScheduleJob> pageQuery(Page<HorusScheduleJob> page) {
         return jobMapper.selectPage(page, null);
+    }
+
+    @Override
+    public IPage<HorusScheduleHistory> pageHistory(String jobCode, Page<HorusScheduleHistory> page) {
+        return historyMapper.selectPage(page, new QueryWrapper<HorusScheduleHistory>().eq("job_code", jobCode));
+    }
+
+    @Override
+    public void editScheduleState(EditScheduleStateDTO editScheduleState) {
+        HorusScheduleJob one = new LambdaQueryChainWrapper<>(jobMapper)
+                .eq(HorusScheduleJob::getJobCode, editScheduleState.getJobCode()).one();
+        if (one == null) {
+            throw ParamErrorException.throwE("该定时任务 " + editScheduleState.getJobCode() + " 不存在！");
+        }
+        // 状态已经一致的不进行处理
+        if (editScheduleState.getState().name().equalsIgnoreCase(one.getState())) {
+            return;
+        }
+        // 启用定时任务
+        if (ComState.ENABLED.equals(editScheduleState.getState())) {
+            // 添加到定时任务中
+            taskRegister.addCronTask(one.getJobCode(), one.getCornStr(), one.getJobType());
+        } else {
+            // 停用定时任务
+            taskRegister.removeCronTask(one.getJobCode());
+        }
+        // 修改数据库的状态
+        new LambdaUpdateChainWrapper<>(jobMapper).set(HorusScheduleJob::getState, editScheduleState.getState().name())
+                .eq(HorusScheduleJob::getJobCode, one.getJobCode()).update();
     }
 
 }

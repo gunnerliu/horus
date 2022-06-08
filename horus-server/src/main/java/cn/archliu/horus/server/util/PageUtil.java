@@ -24,6 +24,10 @@ public class PageUtil {
         return new CRUDData<R>().setItems(convert.apply(data.getRecords())).setTotal(data.getTotal());
     }
 
+    public static <T> CRUDData<T> build(IPage<T> data) {
+        return new CRUDData<T>().setItems(data.getRecords()).setTotal(data.getTotal());
+    }
+
     public static <T, R> CRUDData<R> build(List<T> data, long total, Function<List<T>, List<R>> convert) {
         return new CRUDData<R>().setItems(convert.apply(data)).setTotal(total);
     }

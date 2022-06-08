@@ -3,7 +3,9 @@ package cn.archliu.horus.server.domain.schedule.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleHistory;
 import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleJob;
+import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleStateDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 
 /**
@@ -35,5 +37,23 @@ public interface ScheduleService {
      * @return
      */
     IPage<HorusScheduleJob> pageQuery(Page<HorusScheduleJob> page);
+
+    /**
+     * 分页查询执行历史
+     * 
+     * @param jobCode
+     * @param page
+     * @return
+     */
+    IPage<HorusScheduleHistory> pageHistory(String jobCode, Page<HorusScheduleHistory> page);
+
+    /**
+     * 修改定时任务状态
+     * 
+     * @param editScheduleState
+     */
+    void editScheduleState(EditScheduleStateDTO editScheduleState);
+
+    // TODO 定时任务删除执行历史
 
 }
