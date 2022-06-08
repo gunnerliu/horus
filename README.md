@@ -43,3 +43,16 @@ horus:
         - 需要@的手机号
     msg-aggregation-cycle: 30000
 ```
+
+- dashboard
+  ![image](horus-server/src/main/resources/images/1.jpg)
+- 定时任务
+  ![image](horus-server/src/main/resources/images/2.jpg)
+- 监控指标
+  ![image](horus-server/src/main/resources/images/3.jpg)
+- 监控指标实体类
+  ![image](horus-server/src/main/resources/images/4.jpg)
+- groovy 动态脚本
+  ![image](horus-server/src/main/resources/images/5.jpg)
+- groovy 动态脚本
+  ![image](horus-server/src/main/resources/images/5.jpg)
