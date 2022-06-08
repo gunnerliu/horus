@@ -45,8 +45,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private HorusScheduleHistoryMapper historyMapper;
 
+    // TODO 后续可以改造使用 redis 锁进行并发控制，当前先用 synchronized
     @Override
-    public void addCronTask(ScheduleJobDTO scheduleJobDTO) {
+    public synchronized void addCronTask(ScheduleJobDTO scheduleJobDTO) {
         HorusScheduleJob job = ScheduleConvert.INSTANCE.convert(scheduleJobDTO);
         // 校验 job_code 是否存在
         boolean exists = new LambdaQueryChainWrapper<>(jobMapper)
