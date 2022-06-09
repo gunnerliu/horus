@@ -55,4 +55,4 @@ horus:
 - groovy 动态脚本
   ![image](horus-server/src/main/resources/images/5.jpg)
 - groovy 动态脚本
-  ![image](horus-server/src/main/resources/images/5.jpg)
+  ![image](horus-server/src/main/resources/images/6.jpg)
