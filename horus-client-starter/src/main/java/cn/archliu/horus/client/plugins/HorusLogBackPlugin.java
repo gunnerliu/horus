@@ -30,9 +30,9 @@ import cn.hutool.core.util.StrUtil;
 public class HorusLogBackPlugin {
 
     protected HorusLogBackPlugin(HorusEye horusEye) {
-        ArchTurboFilter archTurboFilter = new ArchTurboFilter(horusEye);
+        HorusTurboFilter horusTurboFilter = new HorusTurboFilter(horusEye);
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        loggerContext.addTurboFilter(archTurboFilter);
+        loggerContext.addTurboFilter(horusTurboFilter);
         loggerContext.addListener(new LoggerContextListener() {
             @Override
             public boolean isResetResistant() {
@@ -41,7 +41,7 @@ public class HorusLogBackPlugin {
 
             @Override
             public void onReset(LoggerContext context) {
-                loggerContext.addTurboFilter(archTurboFilter);
+                loggerContext.addTurboFilter(horusTurboFilter);
             }
 
             @Override
@@ -61,11 +61,11 @@ public class HorusLogBackPlugin {
         });
     }
 
-    public static class ArchTurboFilter extends TurboFilter {
+    public static class HorusTurboFilter extends TurboFilter {
 
         private HorusEye horusEye;
 
-        public ArchTurboFilter(HorusEye horusEye) {
+        public HorusTurboFilter(HorusEye horusEye) {
             this.horusEye = horusEye;
         }
 
