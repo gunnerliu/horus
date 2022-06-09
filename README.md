@@ -1,6 +1,6 @@
 # Horus —— Highly customized business metrics monitoring with TDengine & Spring Boot
 
-- 给予业务监控定制的高度自由
+- 给予业务指标监控的高度定制自由
 
 设计文档：https://akhnhwmr9k.feishu.cn/wiki/wikcnJJFmDHjpLZ3Kxmekcnorgg  
 前端仓库地址：https://github.com/gunnerliu/horus-web  
