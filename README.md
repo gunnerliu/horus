@@ -8,6 +8,18 @@ archliu-common-starter 仓库地址：https://github.com/gunnerliu/archliu-commo
 nginx 日志监控：https://github.com/gunnerliu/horus_log_col  
 TDEngine 官网：https://www.taosdata.com/?zh
 
+## 项目功能简介
+- 指标数据结构管理、导入导出，方便测试环境向生产环境同步数据
+- groovy 动态脚本，基于文件&DB，实现热更新功能
+- 基于 DB 的 cron 定时任务，执行历史记录，打通执行 groovy 脚本
+- 指标数据采集接口，数据清洗插件
+- TDengine & MySQL 查询接口
+- 钉钉告警触达通道
+- 提供默认基础通用插件：
+  - 1、Spring MVC 接口监控
+  - 2、基于 actuator 的 Spring Boot 服务应用监控 & 服务检活
+  - 3、logback 框架 error 日志监控
+
 ## 项目启动配置
 
 - 需要创建 application-private.yml
