@@ -1,4 +1,4 @@
-# Horus —— 基于 TDEngine 时序型数据库的业务监控
+# Horus —— Highly customized business metrics monitoring with TDengine & Spring Boot
 
 - 给予业务监控定制的高度自由
 
