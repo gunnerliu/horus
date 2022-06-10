@@ -9,7 +9,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @EnableScheduling
 @EnableOpenApi
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "cn.archliu.horus" })
 @MapperScan(basePackages = { "cn.archliu.horus.infr.domain.*.mapper" })
 public class HorusServerApplication {
 

@@ -1,0 +1,1 @@
+alter table horus_schedule_job ADD INDEX hsj_job_code(job_code);
