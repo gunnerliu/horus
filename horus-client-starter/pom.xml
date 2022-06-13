@@ -99,4 +99,11 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>archliu_repository</id>
+			<url>scp://192.168.31.106/home/maven/repository/</url>
+		</repository>
+	</distributionManagement>
+
 </project>
