@@ -5,8 +5,6 @@ import static cn.archliu.horus.server.domain.groovy.enums.ScriptParamName.MASTER
 import static cn.archliu.horus.server.domain.groovy.enums.ScriptParamName.MESSAGE_REACH;
 import static cn.archliu.horus.server.domain.groovy.enums.ScriptParamName.TD;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +34,6 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import cn.archliu.common.exception.sub.ParamErrorException;
 import cn.archliu.horus.common.exception.sub.GroovyExecuteException;
@@ -52,7 +49,6 @@ import cn.archliu.horus.server.domain.reach.service.MessageReach;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.BooleanUtil;
@@ -505,15 +501,11 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
             return groovyInfo.getScriptContent();
         } else {
             try {
-                File file = new File(ResourceUtils.getFile(groovyInfo.getFilePath()).getPath());
-                FileReader filerReader = FileReader.create(file);
-                List<String> readLines = filerReader.readLines();
-                StringBuilder sBuilder = new StringBuilder();
-                for (String line : readLines) {
-                    sBuilder.append(line).append("\n");
-                }
-                return sBuilder.toString();
-            } catch (FileNotFoundException e) {
+                Resource resource = new DefaultResourceLoader().getResource(groovyInfo.getFilePath());
+                List<String> contents = new ArrayList<>();
+                IoUtil.readUtf8Lines(resource.getInputStream(), contents);
+                return String.join("\n", contents);
+            } catch (IOException e) {
                 log.warn("groovy 脚本未查询到： {}", groovyCode, e);
                 throw ParamErrorException.throwE("该脚本不存在！");
             }
