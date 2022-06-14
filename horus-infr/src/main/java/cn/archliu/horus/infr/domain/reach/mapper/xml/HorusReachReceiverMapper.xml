@@ -6,5 +6,9 @@
         select rec.* from horus_channel_receiver cr left join horus_reach_receiver rec on cr.channel_id = #{channelId} and cr.receiver_id = rec.id
     </select>
 
+    <select id="pageChannelReceivers" resultType="cn.archliu.horus.infr.domain.reach.entity.HorusReachReceiver">
+        select rec.* from horus_channel_receiver cr left join horus_reach_receiver rec on cr.channel_id = #{channelId} and cr.receiver_id = rec.id
+    </select>
+
 
 </mapper>

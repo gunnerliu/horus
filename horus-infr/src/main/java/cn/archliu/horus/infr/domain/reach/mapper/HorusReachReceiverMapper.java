@@ -3,6 +3,9 @@ package cn.archliu.horus.infr.domain.reach.mapper;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import org.apache.ibatis.annotations.Param;
 
 import cn.archliu.horus.infr.domain.reach.entity.HorusReachReceiver;
 
@@ -22,6 +25,15 @@ public interface HorusReachReceiverMapper extends BaseMapper<HorusReachReceiver>
      * @param channelId
      * @return
      */
-    List<HorusReachReceiver> loadByChannel(Long channelId);
+    List<HorusReachReceiver> loadByChannel(@Param("channelId") Long channelId);
+
+    /**
+     * 分页查询达通道的接收人
+     * 
+     * @param page
+     * @param channelId
+     * @return
+     */
+    IPage<HorusReachReceiver> pageChannelReceivers(IPage<HorusReachReceiver> page, @Param("channelId") Long channelId);
 
 }

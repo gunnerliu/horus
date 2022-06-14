@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.archliu.horus.infr.domain.reach.mapper.HorusReachChannelMapper">
 
+    <insert id="addChannelReceiver">
+        insert into horus_channel_receiver(channel_id, receiver_id) values(#{channelId}, #{receiverId})
+    </insert>
+
+    <select id="channelReceiverExists" resultType="java.lang.Boolean">
+        SELECT
+           count(1)
+        FROM
+            horus_channel_receiver
+        WHERE 
+            channel_id = #{channelId};
+        and receiver_id = #{receiverId}
+    </select>
+
 </mapper>

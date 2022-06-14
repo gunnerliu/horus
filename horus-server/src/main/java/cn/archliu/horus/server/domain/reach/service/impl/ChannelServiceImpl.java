@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
+import cn.archliu.common.exception.sub.ParamErrorException;
 import cn.archliu.horus.infr.domain.reach.entity.HorusReachChannel;
 import cn.archliu.horus.infr.domain.reach.entity.HorusReachReceiver;
 import cn.archliu.horus.infr.domain.reach.mapper.HorusReachChannelMapper;
@@ -22,6 +25,7 @@ import cn.archliu.horus.server.domain.reach.entity.ReachChannel;
 import cn.archliu.horus.server.domain.reach.entity.ReceiverInfo;
 import cn.archliu.horus.server.domain.reach.enums.ReacherType;
 import cn.archliu.horus.server.domain.reach.service.ChannelService;
+import cn.archliu.horus.server.domain.reach.web.dto.ChannelReceiverDTO;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
@@ -70,6 +74,49 @@ public class ChannelServiceImpl implements ChannelService, ApplicationRunner {
             channelList.add(new ReachChannel().setChannelCode(channel.getChannelCode()).setReceivers(collect));
         }
         return channelList;
+    }
+
+    @Override
+    public void addReachChannel(HorusReachChannel reachChannel) {
+        boolean exists = new LambdaQueryChainWrapper<>(channelMapper)
+                .eq(HorusReachChannel::getChannelCode, reachChannel.getChannelCode()).exists();
+        if (exists) {
+            throw ParamErrorException.throwE("该触达通道已经存在！");
+        }
+        // 数据落地
+        channelMapper.insert(reachChannel);
+    }
+
+    @Override
+    public void addReceiver(HorusReachReceiver reachReceiver) {
+        receiverMapper.insert(reachReceiver);
+    }
+
+    @Override
+    public void addChannelReceiver(ChannelReceiverDTO channelReceiverDTO) {
+        boolean channelExists = new LambdaQueryChainWrapper<>(channelMapper)
+                .eq(HorusReachChannel::getId, channelReceiverDTO.getChannelId()).exists();
+        boolean receiverExists = new LambdaQueryChainWrapper<>(receiverMapper)
+                .eq(HorusReachReceiver::getId, channelReceiverDTO.getReceiverId()).exists();
+        if (!channelExists || !receiverExists) {
+            throw ParamErrorException.throwE("触达通道或者接收人不存在！");
+        }
+        if (channelMapper.channelReceiverExists(channelReceiverDTO.getChannelId(),
+                channelReceiverDTO.getReceiverId())) {
+            throw ParamErrorException.throwE("该触达通道已经存在该接收人！");
+        }
+        // 数据落地
+        channelMapper.addChannelReceiver(channelReceiverDTO.getChannelId(), channelReceiverDTO.getReceiverId());
+    }
+
+    @Override
+    public Page<HorusReachChannel> pageChannels(Page<HorusReachChannel> page) {
+        return channelMapper.selectPage(page, null);
+    }
+
+    @Override
+    public IPage<HorusReachReceiver> pageChannelReceivers(Long channelId, Page<HorusReachReceiver> page) {
+        return receiverMapper.pageChannelReceivers(page, channelId);
     }
 
     @Override
