@@ -4,7 +4,7 @@ import cn.archliu.horus.server.domain.reach.entity.HorusMessage;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-28 17:20:01
+ * @Date: 2022-05-28 22:20:01
  * @Description: 消息触达服务
  */
 public interface MessageReach {

@@ -2,7 +2,7 @@ package cn.archliu.horus.server.domain.reach.enums;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-28 17:35:46
+ * @Date: 2022-05-28 22:35:46
  * @Description: 消息发送状态
  */
 public enum SendState {

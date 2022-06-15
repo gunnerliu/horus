@@ -11,7 +11,7 @@ import cn.archliu.horus.infr.domain.collection.entity.MetricsCol;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-01 18:22:26
+ * @Date: 2022-05-01 22:22:26
  * @Description: 数据采集相关服务
  */
 public interface CollectionService {

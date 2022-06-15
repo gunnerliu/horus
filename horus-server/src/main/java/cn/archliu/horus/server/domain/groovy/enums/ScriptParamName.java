@@ -2,7 +2,7 @@ package cn.archliu.horus.server.domain.groovy.enums;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-23 10:49:51
+ * @Date: 2022-05-23 22:49:51
  * @Description: groovy 脚本传入的参数名
  */
 public class ScriptParamName {

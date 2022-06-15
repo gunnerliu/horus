@@ -5,7 +5,7 @@ import cn.archliu.horus.infr.domain.metrics.entity.HorusMetricsDesc;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-16 11:20:46
+ * @Date: 2022-05-16 22:20:46
  * @Description: metrics 数据落地之前会进行一些处理,子类需要托管给 Spring
  */
 public interface HorusMetricsFilter {

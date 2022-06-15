@@ -22,7 +22,7 @@ import cn.hutool.core.util.StrUtil;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-14 18:35:32
+ * @Date: 2022-05-14 22:35:32
  * @Description: logback
  */
 @Component("horusLogBackPlugin")

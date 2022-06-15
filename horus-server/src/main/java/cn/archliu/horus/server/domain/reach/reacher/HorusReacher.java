@@ -13,7 +13,7 @@ import cn.hutool.extra.spring.SpringUtil;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-28 13:58:46
+ * @Date: 2022-05-28 22:58:46
  * @Description: 消息触达器
  */
 public interface HorusReacher {

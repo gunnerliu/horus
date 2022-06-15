@@ -2,7 +2,7 @@ package cn.archliu.horus.client.metrics.enums;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-06 17:29:32
+ * @Date: 2022-05-06 22:29:32
  * @Description: 指标code 枚举
  */
 public class MetricsCodes {

@@ -4,7 +4,7 @@ import cn.archliu.common.exception.sub.ParamErrorException;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-28 17:16:22
+ * @Date: 2022-05-28 22:16:22
  * @Description: 触达器类型
  */
 public enum ReacherType {
