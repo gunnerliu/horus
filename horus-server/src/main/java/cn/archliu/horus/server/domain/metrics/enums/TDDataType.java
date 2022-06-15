@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /**
  * @Author: Arch
- * @Date: 2022-04-27 11:57:49
+ * @Date: 2022-04-27 22:57:49
  * @Description: TDEngine 数据类型
  */
 @Getter

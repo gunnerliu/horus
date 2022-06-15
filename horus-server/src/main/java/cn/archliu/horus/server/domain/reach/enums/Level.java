@@ -2,7 +2,7 @@ package cn.archliu.horus.server.domain.reach.enums;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-28 19:06:39
+ * @Date: 2022-05-28 22:06:39
  * @Description: 消息等级
  */
 public enum Level {

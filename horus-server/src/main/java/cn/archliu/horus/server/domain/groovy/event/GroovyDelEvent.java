@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-25 16:55:40
+ * @Date: 2022-05-25 22:55:40
  * @Description: groovy 脚本删除事件
  */
 public class GroovyDelEvent extends ApplicationEvent {

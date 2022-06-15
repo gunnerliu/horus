@@ -10,7 +10,7 @@ import cn.archliu.horus.infr.domain.groovy.entity.HorusGroovyInfo;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-20 14:25:34
+ * @Date: 2022-05-20 22:25:34
  * @Description: groovy 脚本相关服务
  *               集群场景下需要进行改造: 1、将groovy脚本存放文件放入一个分布式的文件管理中心; 2、锁不需要改造
  */

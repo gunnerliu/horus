@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * @Author: Arch
- * @Date: 2022-04-27 14:27:20
+ * @Date: 2022-04-27 22:27:20
  * @Description: 指标类型
  */
 @Getter

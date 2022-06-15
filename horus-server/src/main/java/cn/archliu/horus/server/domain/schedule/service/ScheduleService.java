@@ -10,7 +10,7 @@ import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 
 /**
  * @Author: Arch
- * @Date: 2022-04-24 15:58:36
+ * @Date: 2022-04-24 22:58:36
  * @Description: 定时任务相关服务
  */
 public interface ScheduleService {

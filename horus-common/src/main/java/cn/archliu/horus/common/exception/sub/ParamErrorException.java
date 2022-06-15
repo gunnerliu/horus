@@ -4,7 +4,7 @@ import cn.archliu.horus.common.exception.BaseException;
 
 /**
  * @Author: Arch
- * @Date: 2022-04-23 18:09:06
+ * @Date: 2022-04-23 22:09:06
  * @Description: 参数错误异常
  */
 public class ParamErrorException extends BaseException {

@@ -16,7 +16,7 @@ import cn.archliu.horus.server.domain.metrics.web.dto.AddMetricsDTO;
 
 /**
  * @Author: Arch
- * @Date: 2022-04-27 12:42:36
+ * @Date: 2022-04-27 22:42:36
  * @Description: 指标数据结构相关服务
  */
 public interface MetricsDescService {

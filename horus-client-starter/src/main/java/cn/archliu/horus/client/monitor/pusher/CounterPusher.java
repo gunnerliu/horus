@@ -8,7 +8,7 @@ import cn.archliu.horus.client.monitor.feign.HorusFeign;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-03 12:16:55
+ * @Date: 2022-05-03 22:16:55
  * @Description: 计数打点数据推送
  */
 public class CounterPusher implements Runnable {

@@ -13,7 +13,7 @@ import cn.archliu.horus.server.domain.reach.web.dto.ChannelReceiverDTO;
 
 /**
  * @Author: Arch
- * @Date: 2022-05-28 14:48:07
+ * @Date: 2022-05-28 22:48:07
  * @Description: 触达通道相关服务
  */
 public interface ChannelService {

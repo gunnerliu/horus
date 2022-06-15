@@ -4,7 +4,7 @@ import cn.archliu.horus.common.exception.sub.ParamErrorException;
 
 /**
  * @Author: Arch
- * @Date: 2022-04-24 15:35:06
+ * @Date: 2022-04-24 22:35:06
  * @Description: 定时任务类型
  */
 public enum ScheduleJobType {

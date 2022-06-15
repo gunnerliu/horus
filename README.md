@@ -5,10 +5,11 @@
 设计文档：https://akhnhwmr9k.feishu.cn/wiki/wikcnJJFmDHjpLZ3Kxmekcnorgg  
 前端仓库地址：https://github.com/gunnerliu/horus-web  
 archliu-common-starter 仓库地址：https://github.com/gunnerliu/archliu-common-starter  
-nginx 日志监控：https://github.com/gunnerliu/horus_log_col  
+nginx 日志监控插件：https://github.com/gunnerliu/horus_log_col  
 TDEngine 官网：https://www.taosdata.com/?zh
 
 ## 项目功能简介
+
 - 指标数据结构管理、导入导出，方便测试环境向生产环境同步数据
 - groovy 动态脚本，基于文件&DB，实现热更新功能
 - 基于 DB 的 cron 定时任务，执行历史记录，打通执行 groovy 脚本
