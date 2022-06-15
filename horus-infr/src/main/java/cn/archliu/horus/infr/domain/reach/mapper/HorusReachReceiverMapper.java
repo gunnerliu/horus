@@ -28,12 +28,21 @@ public interface HorusReachReceiverMapper extends BaseMapper<HorusReachReceiver>
     List<HorusReachReceiver> loadByChannel(@Param("channelId") Long channelId);
 
     /**
-     * 分页查询达通道的接收人
+     * 分页查询触达通道的接收人
      * 
      * @param page
      * @param channelId
      * @return
      */
     IPage<HorusReachReceiver> pageChannelReceivers(IPage<HorusReachReceiver> page, @Param("channelId") Long channelId);
+
+    /**
+     * 分页查询接收人
+     * 
+     * @param page
+     * @param channelId
+     * @return
+     */
+    IPage<HorusReachReceiver> pageReceivers(IPage<HorusReachReceiver> page);
 
 }

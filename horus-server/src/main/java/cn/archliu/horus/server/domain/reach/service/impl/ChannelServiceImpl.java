@@ -116,7 +116,8 @@ public class ChannelServiceImpl implements ChannelService, ApplicationRunner {
 
     @Override
     public IPage<HorusReachReceiver> pageChannelReceivers(Long channelId, Page<HorusReachReceiver> page) {
-        return receiverMapper.pageChannelReceivers(page, channelId);
+        return channelId == null ? receiverMapper.pageReceivers(page)
+                : receiverMapper.pageChannelReceivers(page, channelId);
     }
 
     @Override

@@ -78,9 +78,10 @@ public class ReachWeb {
         return ComRes.success(new CRUDData<HorusReachChannel>().setItems(data.getRecords()).setTotal(data.getTotal()));
     }
 
-    @ApiOperation("查询通道下的接收人")
-    @GetMapping("/pageChannelReceivers")
-    public ComRes<CRUDData<HorusReachReceiver>> pageChannelReceivers(@RequestParam("channelId") Long channelId,
+    @ApiOperation("查询接收人")
+    @GetMapping("/pageReceivers")
+    public ComRes<CRUDData<HorusReachReceiver>> pageReceivers(
+            @RequestParam(value = "channelId", required = false) Long channelId,
             @RequestParam("pageIndex") Integer pageIndex, @RequestParam("pageSize") Integer pageSize) {
         Page<HorusReachReceiver> page = PageUtil.build(pageIndex, pageSize);
         IPage<HorusReachReceiver> data = channelService.pageChannelReceivers(channelId, page);
