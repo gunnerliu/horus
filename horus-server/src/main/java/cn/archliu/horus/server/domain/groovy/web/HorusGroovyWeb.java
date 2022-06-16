@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import cn.archliu.horus.infr.domain.groovy.entity.HorusGroovyInfo;
 import cn.archliu.horus.server.domain.groovy.service.HorusGroovyService;
 import cn.archliu.horus.server.domain.groovy.web.convert.GroovyConvert;
 import cn.archliu.horus.server.domain.groovy.web.dto.AddGroovyDTO;
+import cn.archliu.horus.server.domain.groovy.web.dto.ExecuteGroovyDTO;
 import cn.archliu.horus.server.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,14 @@ public class HorusGroovyWeb {
 
     @Autowired
     private HorusGroovyService groovyService;
+
+    @ApiOperation("执行 groovy 脚本")
+    @PostMapping("/executeGroovy")
+    public ComRes<ResData<Object>> executeGroovy(@RequestParam("groovyCode") String groovyCode,
+            @RequestBody ExecuteGroovyDTO executeGroovyDTO) {
+        Object res = groovyService.executeGroovy(groovyCode, executeGroovyDTO.getArgs());
+        return ComRes.success(new ResData<>(res));
+    }
 
     @ApiOperation("新增 groovy 脚本")
     @PutMapping("/addGroovy")
