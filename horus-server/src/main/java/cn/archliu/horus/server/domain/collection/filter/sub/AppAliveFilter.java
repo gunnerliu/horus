@@ -108,7 +108,7 @@ public class AppAliveFilter implements HorusMetricsFilter {
                     if (!OnlineState.ONLINE.name().equals(state)) {
                         messageReach.sendMessage(new HorusMessage().setCategoryCode("appCheck").setTag("appOnline")
                                 .setLevel(Level.INSTANT).setContent("服务上线： " + item.getApplicationName() + " , "
-                                        + item.getAppIp() + " , " + item.getAppPort()));
+                                        + item.getAppIp() + ":" + item.getAppPort()));
                         log.info("服务上线: {}", item.toString());
                     }
                 }
