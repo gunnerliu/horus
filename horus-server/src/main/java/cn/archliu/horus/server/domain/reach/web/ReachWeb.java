@@ -78,7 +78,7 @@ public class ReachWeb {
         return ComRes.success(new CRUDData<HorusReachChannel>().setItems(data.getRecords()).setTotal(data.getTotal()));
     }
 
-    @ApiOperation("查询接收人")
+    @ApiOperation("分页查询接收人")
     @GetMapping("/pageReceivers")
     public ComRes<CRUDData<HorusReachReceiver>> pageReceivers(
             @RequestParam(value = "channelId", required = false) Long channelId,

@@ -75,6 +75,8 @@ mybatis-plus:
 archliu:
   common:
     add-advice: true
+    # cors-properties:
+    #   cors-origin: true
 
 horus:
   client:
