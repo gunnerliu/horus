@@ -58,14 +58,18 @@ horus:
 ```
 
 - dashboard
-  ![image](horus-server/src/main/resources/images/1.jpg)
+  ![image](horus-server/src/main/resources/images/1.png)
 - 定时任务
-  ![image](horus-server/src/main/resources/images/2.jpg)
+  ![image](horus-server/src/main/resources/images/2.png)
 - 监控指标
-  ![image](horus-server/src/main/resources/images/3.jpg)
+  ![image](horus-server/src/main/resources/images/3.png)
+- 指标数据结构
+  ![image](horus-server/src/main/resources/images/4.png)
 - 监控指标实体类
-  ![image](horus-server/src/main/resources/images/4.jpg)
+  ![image](horus-server/src/main/resources/images/4-1.png)
 - groovy 动态脚本
-  ![image](horus-server/src/main/resources/images/5.jpg)
-- groovy 动态脚本
-  ![image](horus-server/src/main/resources/images/6.jpg)
+  ![image](horus-server/src/main/resources/images/5.png)
+- 脚本内容
+  ![image](horus-server/src/main/resources/images/6.png)
+- 消息触达
+  ![image](horus-server/src/main/resources/images/7.png)
