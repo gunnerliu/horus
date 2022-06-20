@@ -19,7 +19,7 @@ import cn.archliu.horus.infr.domain.metrics.entity.ShowSTableEntity;
 public interface HorusTaosInitMapper {
 
     /** 创建指标数据库 */
-    @Update("create database if not exists metrics keep 30 days 10 update 0;")
+    @Update("create database if not exists metrics PRECISION 'ns' keep 30 days 10 update 0;")
     void initMetricsDB();
 
     /** 创建计数指标的超级表 */
