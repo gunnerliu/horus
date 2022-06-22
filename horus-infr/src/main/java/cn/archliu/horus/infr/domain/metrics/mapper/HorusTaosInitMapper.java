@@ -17,16 +17,15 @@ import cn.archliu.horus.infr.domain.metrics.entity.ShowSTableEntity;
  * @Date: 2022-04-27 20:08:23
  * @Description: taos 初始化
  */
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 @DS("td")
 public interface HorusTaosInitMapper {
 
     /** 创建指标数据库 */
     @Update("create database if not exists metrics PRECISION 'ns' keep 30 days 10 update 0;")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void initMetricsDB();
 
     /** 创建计数指标的超级表 */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void initCounterST();
 
     /**
@@ -35,7 +34,6 @@ public interface HorusTaosInitMapper {
      * @param taosStName
      * @param columns
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void createTDSTable(@Param("taosStName") String taosStName, @Param("columns") List<AddColumnEntity> columns);
 
     /**
@@ -43,7 +41,6 @@ public interface HorusTaosInitMapper {
      * 
      * @param addColumnEntity
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void addColumn(@Param("addColumnEntity") AddColumnEntity addColumnEntity);
 
     /**
