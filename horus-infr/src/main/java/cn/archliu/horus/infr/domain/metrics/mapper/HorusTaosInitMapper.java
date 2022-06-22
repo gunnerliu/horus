@@ -6,6 +6,8 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.archliu.horus.infr.domain.metrics.entity.AddColumnEntity;
 import cn.archliu.horus.infr.domain.metrics.entity.ShowSTableEntity;
@@ -20,9 +22,11 @@ public interface HorusTaosInitMapper {
 
     /** 创建指标数据库 */
     @Update("create database if not exists metrics PRECISION 'ns' keep 30 days 10 update 0;")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void initMetricsDB();
 
     /** 创建计数指标的超级表 */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void initCounterST();
 
     /**
@@ -31,6 +35,7 @@ public interface HorusTaosInitMapper {
      * @param taosStName
      * @param columns
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void createTDSTable(@Param("taosStName") String taosStName, @Param("columns") List<AddColumnEntity> columns);
 
     /**
@@ -38,6 +43,7 @@ public interface HorusTaosInitMapper {
      * 
      * @param addColumnEntity
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void addColumn(@Param("addColumnEntity") AddColumnEntity addColumnEntity);
 
     /**
