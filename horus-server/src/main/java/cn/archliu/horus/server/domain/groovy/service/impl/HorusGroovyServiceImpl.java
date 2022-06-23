@@ -45,6 +45,7 @@ import cn.archliu.horus.server.domain.groovy.entity.GroovyScriptEngineCache;
 import cn.archliu.horus.server.domain.groovy.enums.ExecuteType;
 import cn.archliu.horus.server.domain.groovy.event.GroovyDelEvent;
 import cn.archliu.horus.server.domain.groovy.service.HorusGroovyService;
+import cn.archliu.horus.server.domain.groovy.web.dto.EditGroovyDTO;
 import cn.archliu.horus.server.domain.reach.service.MessageReach;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
@@ -511,5 +512,16 @@ public class HorusGroovyServiceImpl implements HorusGroovyService {
             }
         }
 
+    }
+
+    @Override
+    public void editGroovy(EditGroovyDTO editGroovyDTO) {
+        // 1、先修改数据库
+        new LambdaUpdateChainWrapper<>(groovyInfoMapper)
+                .set(HorusGroovyInfo::getScriptContent, editGroovyDTO.getScriptContent())
+                .set(HorusGroovyInfo::getLastModTime, System.currentTimeMillis())
+                .eq(HorusGroovyInfo::getGroovyCode, editGroovyDTO.getGroovyCode()).update();
+        // 2、卸载缓存
+        unInstallGroovy(editGroovyDTO.getGroovyCode());
     }
 }

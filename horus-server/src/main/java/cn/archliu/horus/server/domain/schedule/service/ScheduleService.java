@@ -54,6 +54,9 @@ public interface ScheduleService {
      */
     void editScheduleState(EditScheduleStateDTO editScheduleState);
 
-    // TODO 定时任务删除执行历史
+    /**
+     * 每天 0 点清除 7 天之前的定时任务执行历史
+     */
+    void cleanHistory();
 
 }

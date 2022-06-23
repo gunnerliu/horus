@@ -23,8 +23,11 @@ public class HorusServerProperties {
     /** 默认触达配置 */
     private ReachInfo reachInfo = new ReachInfo();
 
-    /** 消息聚合周期，单位毫秒 */
+    /** 消息聚合周期, 单位毫秒, 默认 30 秒一次聚合 */
     private String msgAggregationCycle = "30000";
+
+    /** 清除定时任务执行历史的 cron 表达式, 默认是凌晨 0 点 */
+    private String scheduleHistoryCleanCron = "0 0 * * *";
 
     @Data
     @Accessors(chain = true)

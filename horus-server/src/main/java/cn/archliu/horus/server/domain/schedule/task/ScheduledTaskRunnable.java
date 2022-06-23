@@ -13,6 +13,9 @@ import cn.archliu.horus.infr.domain.schedule.mapper.HorusScheduleHistoryMapper;
 import cn.archliu.horus.infr.domain.schedule.mapper.HorusScheduleJobMapper;
 import cn.archliu.horus.server.domain.groovy.enums.ScriptParamName;
 import cn.archliu.horus.server.domain.groovy.service.HorusGroovyService;
+import cn.archliu.horus.server.domain.reach.entity.HorusMessage;
+import cn.archliu.horus.server.domain.reach.enums.Level;
+import cn.archliu.horus.server.domain.reach.service.MessageReach;
 import cn.archliu.horus.server.domain.schedule.enums.ScheduleJobType;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -67,7 +70,10 @@ public class ScheduledTaskRunnable implements Runnable {
         // 添加定时任务的执行记录
         HorusScheduleHistoryMapper scheduleHistoryMapper = SpringUtil.getBean(HorusScheduleHistoryMapper.class);
         scheduleHistoryMapper.insert(history);
-        // TODO 定时任务执行失败的进行告警
+        // 定时任务执行失败的进行告警
+        MessageReach messageReach = SpringUtil.getBean(MessageReach.class);
+        messageReach.sendMessage(new HorusMessage().setCategoryCode("scheduleTask").setTag(job.getJobCode())
+                .setLevel(Level.INSTANT).setContent("定时任务执行失败, jobCode: " + job.getJobCode()));
     }
 
     /**

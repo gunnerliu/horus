@@ -23,6 +23,7 @@ import cn.archliu.horus.infr.domain.groovy.entity.HorusGroovyInfo;
 import cn.archliu.horus.server.domain.groovy.service.HorusGroovyService;
 import cn.archliu.horus.server.domain.groovy.web.convert.GroovyConvert;
 import cn.archliu.horus.server.domain.groovy.web.dto.AddGroovyDTO;
+import cn.archliu.horus.server.domain.groovy.web.dto.EditGroovyDTO;
 import cn.archliu.horus.server.domain.groovy.web.dto.ExecuteGroovyDTO;
 import cn.archliu.horus.server.util.PageUtil;
 import io.swagger.annotations.Api;
@@ -89,6 +90,11 @@ public class HorusGroovyWeb {
         return ComRes.success(new ResData<>(groovyService.groovyDetail(groovyCode)));
     }
 
-    // TODO 编辑 groovy 脚本内容
+    @ApiOperation("编辑 groovy 脚本内容")
+    @PostMapping("/editGroovy")
+    public ComRes<ResData<Void>> editGroovy(@RequestBody EditGroovyDTO editGroovyDTO) {
+        groovyService.editGroovy(editGroovyDTO);
+        return ComRes.success();
+    }
 
 }

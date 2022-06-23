@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.archliu.horus.infr.domain.groovy.entity.HorusGroovyInfo;
+import cn.archliu.horus.server.domain.groovy.web.dto.EditGroovyDTO;
 
 /**
  * @Author: Arch
@@ -68,5 +69,12 @@ public interface HorusGroovyService {
      * @return
      */
     IPage<HorusGroovyInfo> pageQuery(Page<HorusGroovyInfo> page);
+
+    /**
+     * 编辑 groovy 脚本内容
+     * 
+     * @param editGroovyDTO
+     */
+    void editGroovy(EditGroovyDTO editGroovyDTO);
 
 }

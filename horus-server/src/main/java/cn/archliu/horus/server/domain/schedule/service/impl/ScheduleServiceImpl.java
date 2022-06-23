@@ -1,14 +1,18 @@
 package cn.archliu.horus.server.domain.schedule.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import cn.archliu.horus.common.enums.ComState;
@@ -143,6 +147,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         // 修改数据库的状态
         new LambdaUpdateChainWrapper<>(jobMapper).set(HorusScheduleJob::getState, editScheduleState.getState().name())
                 .eq(HorusScheduleJob::getJobCode, one.getJobCode()).update();
+    }
+
+    @Override
+    @Scheduled(cron = "${schedule-history-clean-cron:0 0 * * *}")
+    public void cleanHistory() {
+        LambdaQueryWrapper<HorusScheduleHistory> sql = Wrappers.<HorusScheduleHistory>lambdaQuery()
+                .lt(HorusScheduleHistory::getCreateTime, LocalDateTime.now().minusDays(7L));
+        historyMapper.delete(sql);
     }
 
 }
