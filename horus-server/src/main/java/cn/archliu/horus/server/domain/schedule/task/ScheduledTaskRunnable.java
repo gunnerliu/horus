@@ -32,11 +32,8 @@ public class ScheduledTaskRunnable implements Runnable {
 
     private String jobCode;
 
-    private ScheduleJobType jobType;
-
-    public ScheduledTaskRunnable(String jobCode, String jobType) {
+    public ScheduledTaskRunnable(String jobCode) {
         this.jobCode = jobCode;
-        this.jobType = ScheduleJobType.convertThrowE(jobType);
     }
 
     @Override
@@ -52,6 +49,7 @@ public class ScheduledTaskRunnable implements Runnable {
         HorusScheduleHistory history = new HorusScheduleHistory().setJobCode(job.getJobCode())
                 .setCornStr(job.getCornStr()).setJobExecuteId(job.getJobExecuteId()).setJobType(job.getJobType())
                 .setParamStr(job.getParamStr()).setExecuteState("SUCCESS");
+        ScheduleJobType jobType = ScheduleJobType.convertThrowE(job.getJobType());
         try {
             // 校验 execute_job_id 是否存在
             switch (jobType) {

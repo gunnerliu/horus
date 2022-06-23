@@ -24,6 +24,7 @@ import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleHistory;
 import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleJob;
 import cn.archliu.horus.server.domain.schedule.service.ScheduleService;
 import cn.archliu.horus.server.domain.schedule.web.convert.ScheduleConvert;
+import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleStateDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 import cn.archliu.horus.server.util.PageUtil;
@@ -77,8 +78,8 @@ public class ScheduleWeb {
 
     @ApiOperation("修改定时任务")
     @PostMapping("/editCronTask")
-    public ComRes<ResData<Void>> editCronTask() {
-        // TODO 修改定时任务
+    public ComRes<ResData<Void>> editCronTask(@RequestBody EditScheduleDTO editScheduleDTO) {
+        scheduleService.editCronTask(editScheduleDTO);
         return ComRes.success();
     }
 
@@ -90,6 +91,13 @@ public class ScheduleWeb {
         Page<HorusScheduleHistory> page = PageUtil.build(pageIndex, pageSize);
         IPage<HorusScheduleHistory> pageHistory = scheduleService.pageHistory(jobCode, page);
         return ComRes.success(PageUtil.build(pageHistory));
+    }
+
+    @ApiOperation("执行任务")
+    @PostMapping("/runSchedule")
+    public ComRes<ResData<Void>> runSchedule(@RequestParam("jobCode") String jobCode) {
+        scheduleService.runSchedule(jobCode);
+        return ComRes.success();
     }
 
 }

@@ -57,7 +57,7 @@ public class CronTaskRegister {
             return;
         }
         // 创建执行定时任务的线程
-        ScheduledTaskRunnable taskRunnable = new ScheduledTaskRunnable(jobCode, jobType);
+        ScheduledTaskRunnable taskRunnable = new ScheduledTaskRunnable(jobCode);
         ScheduledFuture<?> schedule = taskScheduler.schedule(taskRunnable,
                 new CronTask(taskRunnable, cronExpression).getTrigger());
         // 放入到缓存中

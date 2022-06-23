@@ -26,7 +26,9 @@ import cn.archliu.horus.infr.domain.schedule.mapper.HorusScheduleJobMapper;
 import cn.archliu.horus.server.domain.schedule.service.ScheduleService;
 import cn.archliu.horus.server.domain.schedule.task.CronTaskRegister;
 import cn.archliu.horus.server.domain.schedule.task.HorusScheduleTask;
+import cn.archliu.horus.server.domain.schedule.task.ScheduledTaskRunnable;
 import cn.archliu.horus.server.domain.schedule.web.convert.ScheduleConvert;
+import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleStateDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 import cn.hutool.core.map.MapUtil;
@@ -155,6 +157,29 @@ public class ScheduleServiceImpl implements ScheduleService {
         LambdaQueryWrapper<HorusScheduleHistory> sql = Wrappers.<HorusScheduleHistory>lambdaQuery()
                 .lt(HorusScheduleHistory::getCreateTime, LocalDateTime.now().minusDays(7L));
         historyMapper.delete(sql);
+    }
+
+    @Override
+    public void editCronTask(EditScheduleDTO editScheduleDTO) {
+        // 1、先修改数据中的
+        new LambdaUpdateChainWrapper<>(jobMapper).set(HorusScheduleJob::getJobName, editScheduleDTO.getJobName())
+                .set(HorusScheduleJob::getCornStr, editScheduleDTO.getCornStr())
+                .set(HorusScheduleJob::getParamStr, editScheduleDTO.getParamStr())
+                .eq(HorusScheduleJob::getJobCode, editScheduleDTO.getJobCode()).update();
+        // 2、内存中移除定时任务
+        taskRegister.removeCronTask(editScheduleDTO.getJobCode());
+        // 3、添加到定时任务中
+        HorusScheduleJob one = new LambdaQueryChainWrapper<>(jobMapper)
+                .eq(HorusScheduleJob::getJobCode, editScheduleDTO.getJobCode()).one();
+        taskRegister.addCronTask(one.getJobCode(), one.getCornStr(), one.getJobType());
+    }
+
+    @Override
+    public void runSchedule(String jobCode) {
+        // 创建任务
+        ScheduledTaskRunnable taskRunnable = new ScheduledTaskRunnable(jobCode);
+        // 执行任务
+        taskRunnable.run();
     }
 
 }

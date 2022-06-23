@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleHistory;
 import cn.archliu.horus.infr.domain.schedule.entity.HorusScheduleJob;
+import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.EditScheduleStateDTO;
 import cn.archliu.horus.server.domain.schedule.web.dto.ScheduleJobDTO;
 
@@ -58,5 +59,19 @@ public interface ScheduleService {
      * 每天 0 点清除 7 天之前的定时任务执行历史
      */
     void cleanHistory();
+
+    /**
+     * 修改定时任务
+     * 
+     * @param editScheduleDTO
+     */
+    void editCronTask(EditScheduleDTO editScheduleDTO);
+
+    /**
+     * 执行任务
+     * 
+     * @param jobCode
+     */
+    void runSchedule(String jobCode);
 
 }
