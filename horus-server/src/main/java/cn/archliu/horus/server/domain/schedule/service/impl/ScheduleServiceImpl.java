@@ -161,7 +161,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public void editCronTask(EditScheduleDTO editScheduleDTO) {
-        // 1、先修改数据中的
+        // 1、先修改 db 中的
         new LambdaUpdateChainWrapper<>(jobMapper).set(HorusScheduleJob::getJobName, editScheduleDTO.getJobName())
                 .set(HorusScheduleJob::getCornStr, editScheduleDTO.getCornStr())
                 .set(HorusScheduleJob::getParamStr, editScheduleDTO.getParamStr())
