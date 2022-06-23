@@ -31,7 +31,7 @@ public class AsyncPoolConfig {
     /** 缓冲队列大小 */
     private static final int QUEUE_CAPACITY = 200;
     /** 线程池名前缀 */
-    private static final String THREAD_NAME_PREFIX = "Horus-Async-";
+    private static final String THREAD_NAME_PREFIX = "Horus-Reach-Async-";
 
     @Bean("msgReachExecutor")
     public ThreadPoolTaskExecutor msgReachExecutor() {

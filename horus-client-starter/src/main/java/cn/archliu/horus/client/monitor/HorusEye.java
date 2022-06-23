@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +53,7 @@ public class HorusEye {
      * 
      * @param counter
      */
+    @Async("markExecutor")
     public void counter(HorusCounter counter) {
         counterLock.lock();
         try {
@@ -69,6 +71,7 @@ public class HorusEye {
      * @param metricsCode
      * @param metric
      */
+    @Async("markExecutor")
     public void mark(String metricsCode, Object metric) {
         metricsLock.lock();
         try {
