@@ -27,7 +27,7 @@ public class HorusServerProperties {
     private String msgAggregationCycle = "30000";
 
     /** 清除定时任务执行历史的 cron 表达式, 默认是凌晨 0 点 */
-    private String scheduleHistoryCleanCron = "0 0 * * *";
+    private String scheduleHistoryCleanCron = "0 0 0 * * ?";
 
     @Data
     @Accessors(chain = true)

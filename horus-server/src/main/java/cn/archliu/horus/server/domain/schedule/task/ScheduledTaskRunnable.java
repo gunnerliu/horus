@@ -64,14 +64,18 @@ public class ScheduledTaskRunnable implements Runnable {
             }
         } catch (Exception e) {
             history.setExecuteState("FAIL").setMsg(e.getMessage());
+            log.error("定时任务执行失败！", e);
         }
         // 添加定时任务的执行记录
         HorusScheduleHistoryMapper scheduleHistoryMapper = SpringUtil.getBean(HorusScheduleHistoryMapper.class);
         scheduleHistoryMapper.insert(history);
         // 定时任务执行失败的进行告警
-        MessageReach messageReach = SpringUtil.getBean(MessageReach.class);
-        messageReach.sendMessage(new HorusMessage().setCategoryCode("scheduleTask").setTag(job.getJobCode())
-                .setLevel(Level.INSTANT).setContent("定时任务执行失败, jobCode: " + job.getJobCode()));
+        if ("FAIL".equals(history.getExecuteState())) {
+            MessageReach messageReach = SpringUtil.getBean(MessageReach.class);
+            messageReach.sendMessage(
+                    new HorusMessage().setCategoryCode("scheduleTask").setTag(job.getJobCode()).setLevel(Level.INSTANT)
+                            .setContent("定时任务执行失败, jobCode: " + job.getJobCode() + " , msg: " + history.getMsg()));
+        }
     }
 
     /**

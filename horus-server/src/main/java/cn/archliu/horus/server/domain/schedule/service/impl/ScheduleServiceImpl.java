@@ -152,7 +152,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    @Scheduled(cron = "${horus.server.schedule-history-clean-cron:0 0 * * *}")
+    @Scheduled(cron = "${horus.server.schedule-history-clean-cron:0 0 0 * * ?}")
     public void cleanHistory() {
         LambdaQueryWrapper<HorusScheduleHistory> sql = Wrappers.<HorusScheduleHistory>lambdaQuery()
                 .lt(HorusScheduleHistory::getCreateTime, LocalDateTime.now().minusDays(7L));
