@@ -141,17 +141,39 @@
 
 	<repositories>
 		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
 			<id>alimaven</id>
 			<name>aliyun maven</name>
 			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
 		</repository>
 		<repository>
-			<id>archliu_repository</id>
-			<url>http://halo.archliu.cn:9001/maven_repository/</url>
+			<id>rdc-releases</id>
+			<url>https://packages.aliyun.com/maven/repository/2280687-release-yH3480/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>rdc-snapshots</id>
+			<url>https://packages.aliyun.com/maven/repository/2280687-snapshot-Y3aXxO/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
 	<pluginRepositories>
+		<pluginRepository>
+          <id>maven-plugin</id>
+          <url>https://repo1.maven.org/maven2/</url>
+        </pluginRepository>
 		<pluginRepository>
 			<id>aliyun-plugin</id>
 			<url>https://maven.aliyun.com/repository/public/</url>

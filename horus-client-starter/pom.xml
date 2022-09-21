@@ -97,26 +97,12 @@
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<extensions>
-			<extension>
-			  <groupId>org.apache.maven.wagon</groupId>
-			  <artifactId>wagon-ssh</artifactId>
-			  <version>2.10</version>
-			</extension>
-		  </extensions>
 	</build>
-
-	<repositories>
-		<repository>
-		  <id>archliu_repository</id>
-		  <url>http://192.168.31.106/maven_repository/</url>
-		</repository>
-	  </repositories>
 
 	<distributionManagement>
 		<repository>
-			<id>archliu_repository</id>
-			<url>scp://192.168.31.106/home/maven/repository/</url>
+			<id>rdc-releases</id>
+			<url>https://packages.aliyun.com/maven/repository/2280687-release-yH3480/</url>
 		</repository>
 	</distributionManagement>
 

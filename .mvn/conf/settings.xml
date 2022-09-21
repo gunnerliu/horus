@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+
+  <pluginGroups></pluginGroups>
+  <proxies></proxies>
+
+  <servers>
+    <server>
+      <id>rdc-releases</id>
+      <username>632bc033eb6ad002b10aec2e</username>
+      <password>F5Yos2MShXJn</password>
+    </server>
+    <server>
+      <id>rdc-snapshots</id>
+      <username>632bc033eb6ad002b10aec2e</username>
+      <password>F5Yos2MShXJn</password>
+    </server>
+  </servers>
+
+  <mirrors>
+    <mirror>
+      <id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+    <mirror>
+      <id>alimaven</id>
+      <name>aliyun maven</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+    <mirror>
+      <id>mirror</id>
+      <mirrorOf>central,jcenter,!rdc-releases,!rdc-snapshots</mirrorOf>
+      <name>mirror</name>
+      <url>https://maven.aliyun.com/nexus/content/groups/public</url>
+    </mirror>
+  </mirrors>
+
+  <profiles>
+    <profile>
+      <id>rdc</id>
+      <properties>
+        <altReleaseDeploymentRepository>
+          rdc-releases::default::https://packages.aliyun.com/maven/repository/2280687-release-yH3480/
+        </altReleaseDeploymentRepository>
+        <altSnapshotDeploymentRepository>
+          rdc-snapshots::default::https://packages.aliyun.com/maven/repository/2280687-snapshot-Y3aXxO/
+        </altSnapshotDeploymentRepository>
+      </properties>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>rdc</activeProfile>
+  </activeProfiles>
+
+</settings>
